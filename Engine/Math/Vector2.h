@@ -8,6 +8,10 @@ namespace gk
 
 		Vector2() : x{ 0 }, y{ 0 } {}
 		Vector2(float x, float y) : x{ x }, y{ y } {}
+		Vector2(int x, int y) : x{ static_cast<float>(x) }, y{ static_cast<float>(y) } {}
+
+		float& operator [] (size_t index) { return (&x)[index]; }
+		const float& operator [] (size_t index) const { return (&x)[index]; }
 
 		void set(float x, float y) { this->x = x; this->y = y; }
 
@@ -20,5 +24,61 @@ namespace gk
 		Vector2 operator - (float s) const { return Vector2{ x - s, y - s }; }
 		Vector2 operator * (float s) const { return Vector2{ x * s, y * s }; }
 		Vector2 operator / (float s) const { return Vector2{ x / s, y / s }; }
+
+		Vector2& operator += (const Vector2& v) { x += v.x; y += v.y; return *this; }
+		Vector2& operator -= (const Vector2& v) { x -= v.x; y -= v.y; return *this; }
+		Vector2& operator *= (const Vector2& v) { x *= v.x; y *= v.y; return *this; }
+		Vector2& operator /= (const Vector2& v) { x /= v.x; y /= v.y; return *this; }
+
+		Vector2& operator += (float s) { x += s; y += s; return *this; }
+		Vector2& operator -= (float s) { x -= s; y -= s; return *this; }
+		Vector2& operator *= (float s) { x *= s; y *= s; return *this; }
+		Vector2& operator /= (float s) { x /= s; y /= s; return *this; }
+
+		Vector2 operator - () { return Vector2{ -x, -y }; }
+
+		float length() const;
+		float lengthsqr() const;
+
+		static float distance(const Vector2& v1, const Vector2& v2);
+
+		Vector2 normalized() const;
+		void normalize();
 	};
+
+	float Vector2::length() const
+	{
+		return std::sqrt((x * x) + (y * y));
+	}
+
+	float Vector2::lengthsqr() const
+	{
+		return (x * x) + (y * y);
+	}
+
+	float Vector2::distance(const Vector2& v1, const Vector2& v2)
+	{
+		Vector2 v = v1 - v2;
+		return v.length();
+	}
+
+	Vector2 Vector2::normalized() const
+	{
+		float Length = length();
+		Vector2 n = (Length == 0.0f) ? Vector2{ 0.0f, 0.0f } : *this / Length;
+
+		return n;
+	}
+	void Vector2::normalize()
+	{
+		float Length = length();
+		if (Length == 0.0f)
+		{
+			*this = Vector2{ 0.0f, 0.0f };
+		}
+		else
+		{
+			*this /= Length;
+		}
+	}
 }
