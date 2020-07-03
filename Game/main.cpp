@@ -3,12 +3,18 @@
 #include "Math/Math.h"
 #include "Math/Random.h"
 #include "Math/Vector2.h"
+#include "Math/Color.h"
 #include <iostream>
 
 const size_t NUM_POINTS = 40;
 float speed = 5.0f;
-std::vector<gk::Vector2> points;
+
+std::vector<gk::Vector2> points = { {0, -3}, {3, 3}, {0, 1}, {-3, 3}, {0, -3} };
+gk::Color color{ 0, 1, 1 };
+ 
 gk::Vector2 position{ 400.0f, 300.0f };
+float scale = 4.0f;
+float angle = 0.0f;
 
 bool Update(float dt)
 {
@@ -22,28 +28,34 @@ bool Update(float dt)
 	gk::Vector2 direction = target - position;
 	direction.normalize();
 
-	position += -direction * 5.0f;
-
-	//if (Core::Input::IsPressed(Core::Input::KEY_LEFT)) { position += gk::Vector2{ -1.0f, 0.0f } *speed; }
-	//if (Core::Input::IsPressed(Core::Input::KEY_RIGHT)) { position += gk::Vector2{ 1.0f, 0.0f } *speed; }
-	
-	for (gk::Vector2& point : points)
-	{
-		point = gk::Vector2{ gk::random(-10.0f, 10.0f), gk::random(-10.0f, 10.0f) };
-	}
+	if (Core::Input::IsPressed('A')) { angle -= dt; }
+	if (Core::Input::IsPressed('D')) { angle += dt; }
 	
 	return quit;
 }
 
 void Draw(Core::Graphics& graphics)
 {
-	graphics.SetColor(RGB(rand() % 256, rand() % 256, rand() % 256));
-	//graphics.DrawLine(static_cast<float>(rand() % 800), static_cast<float>(rand() % 600), static_cast<float>(rand() % 800), static_cast<float>(rand() % 600));
+	graphics.SetColor(color);
 	
-	for (size_t i = 0; i < NUM_POINTS - 1; i++)
+	for (size_t i = 0; i < points.size() - 1; i++)
 	{
-		gk::Vector2 p1 = position + points[i];
-		gk::Vector2 p2 = position + points[i+1];
+		//Local / Object Space Points
+		gk::Vector2 p1 = points[i];
+		gk::Vector2 p2 = points[i+1];
+
+		//Transform
+		//Scale
+		p1 *= scale;
+		p2 *= scale;
+
+		//Rotation
+		p1 = gk::Vector2::rotate(p1, angle);
+		p2 = gk::Vector2::rotate(p2, angle);
+
+		//Translate
+		p1 += position;
+		p2 += position;
 		
 		graphics.DrawLine(p1.x, p1.y, p2.x, p2.y);
 	}
@@ -51,11 +63,6 @@ void Draw(Core::Graphics& graphics)
 
 int main()
 {
-	for (size_t i = 0; i < NUM_POINTS; i++)
-	{
-		points.push_back(gk::Vector2{ gk::random(0.0f, 600.0f), gk::random(0.0f, 800.0f) });
-	}
-	
 	char name[] = "Kilpack";
 	Core::Init(name, 800, 600);
 	Core::RegisterUpdateFn(Update);
@@ -63,7 +70,5 @@ int main()
 
 	Core::GameLoop();
 	Core::Shutdown();
-
-    std::cout << "Hello World!\n";
 }
 

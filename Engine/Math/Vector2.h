@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 namespace gk
 {
 	struct Vector2
@@ -44,32 +46,34 @@ namespace gk
 
 		Vector2 normalized() const;
 		void normalize();
+
+		static Vector2 rotate(Vector2& v, float radians);
 	};
 
-	float Vector2::length() const
+	inline float Vector2::length() const
 	{
 		return std::sqrt((x * x) + (y * y));
 	}
 
-	float Vector2::lengthsqr() const
+	inline float Vector2::lengthsqr() const
 	{
 		return (x * x) + (y * y);
 	}
 
-	float Vector2::distance(const Vector2& v1, const Vector2& v2)
+	inline float Vector2::distance(const Vector2& v1, const Vector2& v2)
 	{
 		Vector2 v = v1 - v2;
 		return v.length();
 	}
 
-	Vector2 Vector2::normalized() const
+	inline Vector2 Vector2::normalized() const
 	{
 		float Length = length();
 		Vector2 n = (Length == 0.0f) ? Vector2{ 0.0f, 0.0f } : *this / Length;
 
 		return n;
 	}
-	void Vector2::normalize()
+	inline void Vector2::normalize()
 	{
 		float Length = length();
 		if (Length == 0.0f)
@@ -80,5 +84,13 @@ namespace gk
 		{
 			*this /= Length;
 		}
+	}
+
+	inline Vector2 Vector2::rotate(Vector2& v, float radians)
+	{
+		float x = v.x * std::cos(radians) - v.y * std::sin(radians);
+		float y = v.x * std::sin(radians) + v.y * std::cos(radians);
+
+		return Vector2{ x, y };
 	}
 }
