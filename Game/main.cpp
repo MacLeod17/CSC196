@@ -8,12 +8,8 @@
 #include <iostream>
 #include <string>
 
-const size_t NUM_POINTS = 40;
-float speed = 300.0f;
-
 std::vector<gk::Vector2> classShape = { {0, -3}, {3, 3}, {0, 1}, {-3, 3}, {0, -3} }; // Triangle-ish shape used as class
 std::vector<gk::Vector2> myShape = { {0, -5}, {3, 3}, {3, 6}, {0, 2}, {0, 6}, {2, 12}, {0, 10}, {-2, 12}, {0, 6}, {0, 2}, {-3, 6}, {-3, 3}, {0, -5} }; // My shape
-std::vector<gk::Vector2> points = myShape;
 
 gk::Color color{ 0, 1, 1 };
 gk::Shape shape{ myShape, color };
@@ -21,9 +17,9 @@ gk::Shape shape{ myShape, color };
 gk::Vector2 position{ 400.0f, 300.0f };
 float scale = 4.0f;
 float angle = 0.0f;
+float speed = 300.0f;
 
 float frametime;
-
 
 bool Update(float dt) // dt = Delta Time
 {
