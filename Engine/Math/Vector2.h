@@ -42,12 +42,17 @@ namespace gk
 		float length() const;
 		float lengthsqr() const;
 
-		static float distance(const Vector2& v1, const Vector2& v2);
-
 		Vector2 normalized() const;
 		void normalize();
 
+		static float distance(const Vector2& v1, const Vector2& v2);
 		static Vector2 rotate(Vector2& v, float radians);
+
+		static const Vector2 left;
+		static const Vector2 right;
+		static const Vector2 up;
+		static const Vector2 down;
+		static const Vector2 forward;
 	};
 
 	inline float Vector2::length() const
