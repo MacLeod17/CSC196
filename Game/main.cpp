@@ -4,15 +4,20 @@
 #include "Math/Random.h"
 #include "Math/Vector2.h"
 #include "Math/Color.h"
+#include "Graphics/Shape.h"
 #include <iostream>
 #include <string>
 
 const size_t NUM_POINTS = 40;
 float speed = 300.0f;
 
-std::vector<gk::Vector2> points = { {0, -3}, {3, 3}, {0, 1}, {-3, 3}, {0, -3} }; // Triangle-ish shape used as class
+std::vector<gk::Vector2> classShape = { {0, -3}, {3, 3}, {0, 1}, {-3, 3}, {0, -3} }; // Triangle-ish shape used as class
+std::vector<gk::Vector2> myShape = { {0, -5}, {3, 3}, {3, 6}, {0, 2}, {0, 6}, {2, 12}, {0, 10}, {-2, 12}, {0, 6}, {0, 2}, {-3, 6}, {-3, 3}, {0, -5} }; // My shape
+std::vector<gk::Vector2> points = myShape;
+
 gk::Color color{ 0, 1, 1 };
- 
+gk::Shape shape{ myShape, color };
+
 gk::Vector2 position{ 400.0f, 300.0f };
 float scale = 4.0f;
 float angle = 0.0f;
@@ -26,10 +31,9 @@ bool Update(float dt) // dt = Delta Time
 	
 	bool quit = Core::Input::IsPressed(Core::Input::KEY_ESCAPE);
 
-	int x;
-	int y;
-	Core::Input::GetMousePos(x, y);
-
+	//int x;
+	//int y;
+	//Core::Input::GetMousePos(x, y);
 	//gk::Vector2 target = gk::Vector2{ x, y };
 	//gk::Vector2 direction = target - position;
 	//direction.normalize();
@@ -56,29 +60,7 @@ void Draw(Core::Graphics& graphics)
 	graphics.DrawString(10, 10, std::to_string(frametime).c_str());
 	graphics.DrawString(10, 20, std::to_string(1.0f / frametime).c_str());
 	
-	graphics.SetColor(color);
-	
-	for (size_t i = 0; i < points.size() - 1; i++)
-	{
-		//Local / Object Space Points
-		gk::Vector2 p1 = points[i];
-		gk::Vector2 p2 = points[i+1];
-
-		//Transform
-		//Scale
-		p1 *= scale;
-		p2 *= scale;
-
-		//Rotation
-		p1 = gk::Vector2::rotate(p1, angle);
-		p2 = gk::Vector2::rotate(p2, angle);
-
-		//Translate
-		p1 += position;
-		p2 += position;
-		
-		graphics.DrawLine(p1.x, p1.y, p2.x, p2.y);
-	}
+	shape.Draw(graphics, position, scale, angle);
 }
 
 int main()
