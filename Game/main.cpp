@@ -9,7 +9,7 @@
 const size_t NUM_POINTS = 40;
 float speed = 5.0f;
 
-std::vector<gk::Vector2> points = { {0, -3}, {3, 3}, {0, 1}, {-3, 3}, {0, -3} };
+std::vector<gk::Vector2> points = { {0, -3}, {3, 3}, {0, 1}, {-3, 3}, {0, -3} }; // Triangle-ish shape used as class
 gk::Color color{ 0, 1, 1 };
  
 gk::Vector2 position{ 400.0f, 300.0f };
