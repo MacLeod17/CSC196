@@ -1,6 +1,31 @@
 
 #include "pch.h"
 #include "Shape.h"
+#include <fstream>
+
+bool gk::Shape::Load(const std::string& filename)
+{
+	bool success = false;
+	
+	std::ifstream stream(filename);
+	if (stream.is_open()) 
+	{ 
+		success = true; 
+
+		while (!stream.eof())
+		{
+			Vector2 point;
+			stream >> point;
+
+			if (!stream.eof()) m_points.push_back(point);
+		}
+		
+
+		stream.close();
+	}
+
+	return success;
+}
 
 void gk::Shape::Draw(Core::Graphics& graphics, gk::Vector2 position, float scale, float angle)
 {
@@ -27,9 +52,4 @@ void gk::Shape::Draw(Core::Graphics& graphics, gk::Vector2 position, float scale
 
 		graphics.DrawLine(p1.x, p1.y, p2.x, p2.y);
 	}
-}
-
-void gk::Shape::SetColor(Color color)
-{
-	m_color = color;
 }
