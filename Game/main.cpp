@@ -83,6 +83,7 @@ int main()
 	prevtime = GetTickCount();
 
 	shape.Load("shape.txt");
+	shape.SetColor(gk::Color{1,1,1});
 
 	char name[] = "Kilpack";
 	Core::Init(name, 800, 600);
