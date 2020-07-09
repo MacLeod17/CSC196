@@ -2,24 +2,16 @@
 #include "core.h"
 #include "Math/Math.h"
 #include "Math/Random.h"
-#include "Math/Vector2.h"
+#include "Math/Transform.h"
 #include "Math/Color.h"
 #include "Graphics/Shape.h"
 #include <iostream>
 #include <string>
 
-std::vector<gk::Vector2> classShape = { {0, -3}, {3, 3}, {0, 1}, {-3, 3}, {0, -3} }; // Triangle-ish shape used as class
-std::vector<gk::Vector2> myShape = { {0, -5}, {3, 3}, {3, 6}, {0, 2}, {0, 6}, {2, 12}, {0, 10}, {-2, 12}, {0, 6}, {0, 2}, {-3, 6}, {-3, 3}, {0, -5} }; // My shape
-
-gk::Color color{ 0, 1, 1 };
 gk::Shape shape;
-//gk::Shape shape{ myShape, color };
+gk::Transform transform{ { 400, 300 }, 4, 0 };
 
-gk::Vector2 position{ 400.0f, 300.0f };
-float scale = 4.0f;
-float angle = 0.0f;
 float speed = 300.0f;
-
 float frametime;
 float roundtime{ 0 };
 bool gameover{ false };
@@ -51,12 +43,12 @@ bool Update(float dt) // dt = Delta Time
 	gk::Vector2 force;
 	if (Core::Input::IsPressed('W')) { force = gk::Vector2::forward * speed * dt; }
 	gk::Vector2 direction = force;
-	direction = gk::Vector2::rotate(direction, angle);
-	position += direction;
+	direction = gk::Vector2::rotate(direction, transform.angle);
+	transform.position += direction;
 
 	//Rotate
-	if (Core::Input::IsPressed('A')) { angle -= (dt * 3.0f); }
-	if (Core::Input::IsPressed('D')) { angle += (dt * 3.0f); }
+	if (Core::Input::IsPressed('A')) { transform.angle -= (dt * 3.0f); }
+	if (Core::Input::IsPressed('D')) { transform.angle += (dt * 3.0f); }
 	
 	//Translate
 	//if (Core::Input::IsPressed('A')) { position += gk::Vector2::left * speed * dt; }
@@ -73,7 +65,7 @@ void Draw(Core::Graphics& graphics)
 
 	if (gameover) graphics.DrawString(400, 300, "Game Over");
 
-	shape.Draw(graphics, position, scale, angle);
+	shape.Draw(graphics, transform);
 }
 
 int main()
@@ -83,7 +75,6 @@ int main()
 	prevtime = GetTickCount();
 
 	shape.Load("shape.txt");
-	shape.SetColor(gk::Color{1,1,1});
 
 	char name[] = "Kilpack";
 	Core::Init(name, 800, 600);

@@ -12,6 +12,8 @@ bool gk::Shape::Load(const std::string& filename)
 	{ 
 		success = true; 
 
+		stream >> m_color;
+
 		while (!stream.eof())
 		{
 			Vector2 point;
@@ -52,4 +54,9 @@ void gk::Shape::Draw(Core::Graphics& graphics, gk::Vector2 position, float scale
 
 		graphics.DrawLine(p1.x, p1.y, p2.x, p2.y);
 	}
+}
+
+void gk::Shape::Draw(Core::Graphics& graphics, const Transform& transform)
+{
+	Draw(graphics, transform.position, transform.scale, transform.angle);
 }

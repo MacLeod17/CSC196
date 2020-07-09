@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Windows.h>
+#include <iostream>
 
 namespace gk
 {
@@ -37,9 +38,10 @@ namespace gk
 		Color& operator *= (float s) { r *= s; g *= s; b *= s; return *this; }
 		Color& operator /= (float s) { r /= s; g /= s; b /= s; return *this; }
 
-		COLORREF pack888() const;
-
 		operator COLORREF() const { return pack888(); }
+		friend std::istream& operator >> (std::istream& stream, Color& c);
+
+		COLORREF pack888() const;
 	};
 
 	inline COLORREF Color::pack888() const
