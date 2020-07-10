@@ -15,6 +15,9 @@
     <Filter Include="Graphics">
       <UniqueIdentifier>{fdb79f6e-e3b0-4a79-8f20-44c823f861d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{32a17786-9b88-49c3-8b9a-d92d699108df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -44,6 +47,9 @@
     <ClInclude Include="Math\Transform.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="Object\Actor.h">
+      <Filter>Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -63,6 +69,9 @@
     </ClCompile>
     <ClCompile Include="Math\Transform.cpp">
       <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Actor.cpp">
+      <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
