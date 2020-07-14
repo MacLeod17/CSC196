@@ -2,3 +2,4 @@
 4.0
 0
 enemyshape.txt
+100.0

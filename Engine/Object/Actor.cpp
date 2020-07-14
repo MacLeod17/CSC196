@@ -13,14 +13,22 @@ namespace gk
         if (stream.is_open())
         {
             success = true;
-            stream >> m_transform;
+            
+            Load(stream);
 
-            std::string shapename;
-            stream >> shapename;
-            m_shape.Load(shapename);
+            stream.close();
         }
 
         return success;
+    }
+
+    void Actor::Load(std::istream& stream)
+    {
+        stream >> m_transform;
+
+        std::string shapename;
+        stream >> shapename;
+        m_shape.Load(shapename);
     }
 
     void Actor::Update(float dt)

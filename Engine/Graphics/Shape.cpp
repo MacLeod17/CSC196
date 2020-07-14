@@ -14,14 +14,18 @@ bool gk::Shape::Load(const std::string& filename)
 
 		stream >> m_color;
 
-		while (!stream.eof())
-		{
-			Vector2 point;
-			stream >> point;
+		//Get # of Points
+		std::string line;
+		getline(stream, line);
+		size_t size = stoi(line);
 
-			if (!stream.eof()) m_points.push_back(point);
+		//Read Points
+		for (size_t i = 0; i < size; i++)
+		{
+			Vector2 v;
+			stream >> v;
+			m_points.push_back(v);
 		}
-		
 
 		stream.close();
 	}
