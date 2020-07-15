@@ -1,6 +1,7 @@
 
 #include "pch.h"
 #include "Shape.h"
+#include "Math/Matrix22.h"
 #include <fstream>
 
 bool gk::Shape::Load(const std::string& filename)
@@ -37,6 +38,13 @@ void gk::Shape::Draw(Core::Graphics& graphics, gk::Vector2 position, float scale
 {
 	graphics.SetColor(m_color);
 
+	Matrix22 mxScale;
+	mxScale.Scale(scale);
+	Matrix22 mxRotate;
+	mxRotate.Rotate(angle);
+
+	Matrix22 mx = mxScale * mxRotate;
+
 	for (size_t i = 0; i < m_points.size() - 1; i++)
 	{
 		//Local / Object Space Points
@@ -44,13 +52,9 @@ void gk::Shape::Draw(Core::Graphics& graphics, gk::Vector2 position, float scale
 		gk::Vector2 p2 = m_points[i + 1];
 
 		//Transform
-		//Scale
-		p1 *= scale;
-		p2 *= scale;
-
-		//Rotation
-		p1 = gk::Vector2::rotate(p1, angle);
-		p2 = gk::Vector2::rotate(p2, angle);
+		//Scale / Rotate
+		p1 = p1 * mx;
+		p2 = p2 * mx;
 
 		//Translate
 		p1 += position;
