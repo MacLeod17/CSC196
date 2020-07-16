@@ -32,5 +32,7 @@ namespace gk
 	    gk::Vector2 velocity = direction * 100.0f;
         m_transform.position += velocity * dt;
         m_transform.angle = std::atan2(direction.y, direction.x) + gk::DegreesToRadians(90);
+
+        m_transform.Update();
     }
 }
