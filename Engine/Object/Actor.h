@@ -2,6 +2,7 @@
 
 #include "Math/Transform.h"
 #include "Graphics/Shape.h"
+#include "Scene.h"
 #include "core.h"
 
 namespace gk
@@ -21,9 +22,11 @@ namespace gk
 
 		Transform& GetTransform() { return m_transform; }
 		Shape& GetShape() { return m_shape; }
+		Scene& GetScene() { return m_scene; }
 
 	protected:
 		Transform m_transform;
 		Shape m_shape;
+		Scene m_scene;
 	};
 }

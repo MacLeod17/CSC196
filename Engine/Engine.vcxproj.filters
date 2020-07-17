@@ -56,6 +56,9 @@
     <ClInclude Include="Math\Matrix33.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="Object\Scene.h">
+      <Filter>Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -77,6 +80,9 @@
       <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="Object\Actor.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Scene.cpp">
       <Filter>Object</Filter>
     </ClCompile>
   </ItemGroup>

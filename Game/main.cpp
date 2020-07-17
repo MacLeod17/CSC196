@@ -6,6 +6,7 @@
 #include "Math/Transform.h"
 #include "Math/Color.h"
 #include "Object/Actor.h"
+#include "Object/Scene.h"
 #include "Actors/Player.h"
 #include "Actors/Enemy.h"
 #include <iostream>
@@ -13,41 +14,10 @@
 #include <list>
 #include <vector>
 
-std::list<gk::Actor*> actors;
+gk::Scene scene;
 
 float frametime;
 float spawntimer{ 0 };
-
-template <typename T>
-gk::Actor* GetActor()
-{
-	gk::Actor* result{ nullptr };
-	
-	for (gk::Actor* actor : actors)
-	{
-		result = dynamic_cast<T*>(actor);
-		if (result) { break; }
-	}
-
-	return result;
-}
-
-template <typename T>
-std::vector<gk::Actor*> GetActors()
-{
-	std::vector<gk::Actor*> results;
-
-	for (gk::Actor* actor : actors)
-	{
-		T* result = dynamic_cast<T*>(actor);
-		if (result) 
-		{ 
-			results.push_back(result); 
-		}
-	}
-
-	return results;
-}
 
 bool Update(float dt) // dt = Delta Time
 {
@@ -57,12 +27,10 @@ bool Update(float dt) // dt = Delta Time
 
 	if (Core::Input::IsPressed(VK_SPACE))
 	{
-		auto removeActors = GetActors<gk::Enemy>();
+		auto removeActors = scene.GetActors<gk::Enemy>();
 		for (auto actor : removeActors)
 		{
-			auto iter = std::find(actors.begin(), actors.end(), actor);
-			delete* iter;
-			actors.erase(iter);
+			scene.RemoveActor(actor);
 		}
 	}
 
@@ -74,16 +42,13 @@ bool Update(float dt) // dt = Delta Time
 		//Add Enemy to Scene
 		gk::Actor* actor = new gk::Enemy;
 		actor->Load("enemy.txt");
-		dynamic_cast<gk::Enemy*>(actor)->SetTarget(GetActor<gk::Player>());
+		dynamic_cast<gk::Enemy*>(actor)->SetTarget(scene.GetActor<gk::Player>());
 		actor->GetTransform().position = gk::Vector2{ gk::random(0, 800), gk::random(0, 600) };
 		dynamic_cast<gk::Enemy*>(actor)->SetThrust(gk::random(50, 150));
-		actors.push_back(actor);
+		scene.AddActor(actor);
 	}
 
-	for (gk::Actor* actor : actors)
-	{
-		actor->Update(dt);
-	}
+	scene.Update(dt);
 	
 	return quit;
 }
@@ -99,17 +64,16 @@ void Draw(Core::Graphics& graphics)
 	//gk::Vector2 p = gk::Lerp(gk::Vector2{ 400, 300 }, gk::Vector2{ 400, 100 }, v);
 	//graphics.DrawString(p.x, p.y, "Last Starfighter");
 
-	for (gk::Actor* actor : actors)
-	{
-		actor->Draw(graphics);
-	}
+	scene.Draw(graphics);
 }
 
 int main()
 {
+	scene.Startup();
+	
 	gk::Actor* player = new gk::Player;
 	player->Load("player.txt");
-	actors.push_back(player);
+	scene.AddActor(player);
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -118,7 +82,7 @@ int main()
 		dynamic_cast<gk::Enemy*>(enemy)->SetTarget(player);
 		enemy->GetTransform().position = gk::Vector2{ gk::random(0, 800), gk::random(0, 600) };
 		dynamic_cast<gk::Enemy*>(enemy)->SetThrust(gk::random(50, 150));
-		actors.push_back(enemy);
+		scene.AddActor(enemy);
 	}
 
 	char name[] = "Kilpack";
@@ -128,4 +92,6 @@ int main()
 
 	Core::GameLoop();
 	Core::Shutdown();
+
+	scene.Shutdown();
 }
