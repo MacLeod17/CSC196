@@ -25,14 +25,14 @@ bool Update(float dt) // dt = Delta Time
 
 	bool quit = Core::Input::IsPressed(Core::Input::KEY_ESCAPE);
 
-	if (Core::Input::IsPressed(VK_SPACE))
-	{
-		auto removeActors = scene.GetActors<gk::Enemy>();
-		for (auto actor : removeActors)
-		{
-			scene.RemoveActor(actor);
-		}
-	}
+	//if (Core::Input::IsPressed(VK_SPACE))
+	//{
+	//	auto removeActors = scene.GetActors<gk::Enemy>();
+	//	for (auto actor : removeActors)
+	//	{
+	//		scene.RemoveActor(actor);
+	//	}
+	//}
 
 	spawntimer += dt;
 	if (spawntimer >= 3.0f)
@@ -40,12 +40,12 @@ bool Update(float dt) // dt = Delta Time
 		spawntimer = 0.0f;
 
 		//Add Enemy to Scene
-		gk::Actor* actor = new gk::Enemy;
-		actor->Load("enemy.txt");
-		dynamic_cast<gk::Enemy*>(actor)->SetTarget(scene.GetActor<gk::Player>());
-		actor->GetTransform().position = gk::Vector2{ gk::random(0, 800), gk::random(0, 600) };
-		dynamic_cast<gk::Enemy*>(actor)->SetThrust(gk::random(50, 150));
-		scene.AddActor(actor);
+		gk::Enemy* enemy = new gk::Enemy;
+		enemy->Load("enemy.txt");
+		enemy->SetTarget(scene.GetActor<gk::Player>());
+		enemy->GetTransform().position = gk::Vector2{ gk::random(0, 800), gk::random(0, 600) };
+		enemy->SetThrust(gk::random(50, 150));
+		scene.AddActor(enemy);
 	}
 
 	scene.Update(dt);
@@ -71,17 +71,17 @@ int main()
 {
 	scene.Startup();
 	
-	gk::Actor* player = new gk::Player;
+	gk::Player* player = new gk::Player;
 	player->Load("player.txt");
 	scene.AddActor(player);
 
 	for (int i = 0; i < 3; i++)
 	{
-		gk::Actor* enemy = new gk::Enemy;
+		gk::Enemy* enemy = new gk::Enemy;
 		enemy->Load("enemy.txt");
-		dynamic_cast<gk::Enemy*>(enemy)->SetTarget(player);
+		enemy->SetTarget(player);
 		enemy->GetTransform().position = gk::Vector2{ gk::random(0, 800), gk::random(0, 600) };
-		dynamic_cast<gk::Enemy*>(enemy)->SetThrust(gk::random(50, 150));
+		enemy->SetThrust(gk::random(50, 150));
 		scene.AddActor(enemy);
 	}
 

@@ -1,6 +1,7 @@
 
 #include "core.h"
 #include "Player.h"
+#include "Projectile.h"
 #include "Math/Math.h"
 #include <fstream>
 
@@ -28,6 +29,18 @@ namespace gk
 
 	void Player::Update(float dt)
 	{
+		m_fireTimer += dt;
+		
+		if (Core::Input::IsPressed(VK_SPACE) && m_fireTimer >= m_fireRate)
+		{
+			m_fireTimer = 0;
+			Projectile* projectile = new Projectile;
+			projectile->Load("projectile.txt");
+			projectile->GetTransform().position = m_transform.position;
+			projectile->GetTransform().angle = m_transform.angle;
+			m_scene->AddActor(projectile);
+		}
+		
 		Vector2 force{ 0, 0 };
 		if (Core::Input::IsPressed('W')) { force = Vector2::forward * m_thrust; }
 		force = Vector2::rotate(force, m_transform.angle);

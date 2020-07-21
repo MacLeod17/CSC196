@@ -4,13 +4,13 @@
 
 namespace gk
 {
-	class Enemy : public Actor
+	class Projectile : public Actor
 	{
 	public:
-		Enemy() {}
-		virtual ~Enemy() {}
+		Projectile() {}
+		virtual ~Projectile() {}
 		
-		virtual eType GetType() { return eType::ENEMY; }
+		virtual eType GetType() { return eType::PROJECTILE; }
 
 		virtual bool Load(const std::string& filename) override;
 		virtual void Update(float dt) override;
@@ -18,10 +18,8 @@ namespace gk
 		virtual void OnCollision(Actor* actor);
 
 		void SetThrust(float thrust) { m_thrust = thrust; }
-		void SetTarget(Actor* actor) { m_target = actor; }
 
 	protected:
 		float m_thrust{ 0.0f };
-		Actor* m_target{ nullptr };
 	};
 }

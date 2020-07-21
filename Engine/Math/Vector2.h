@@ -48,7 +48,7 @@ namespace gk
 		void normalize();
 
 		static float distance(const Vector2& v1, const Vector2& v2);
-		static Vector2 rotate(Vector2& v, float radians);
+		static Vector2 rotate(const Vector2& v, float radians);
 
 		static const Vector2 left;
 		static const Vector2 right;
@@ -93,7 +93,7 @@ namespace gk
 		}
 	}
 
-	inline Vector2 Vector2::rotate(Vector2& v, float radians)
+	inline Vector2 Vector2::rotate(const Vector2& v, float radians)
 	{
 		float x = v.x * std::cos(radians) - v.y * std::sin(radians);
 		float y = v.x * std::sin(radians) + v.y * std::cos(radians);
