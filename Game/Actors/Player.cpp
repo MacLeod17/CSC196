@@ -2,6 +2,7 @@
 #include "core.h"
 #include "Player.h"
 #include "Projectile.h"
+#include "Graphics/ParticleSystem.h"
 #include "Math/Math.h"
 #include <fstream>
 
@@ -59,6 +60,11 @@ namespace gk
 
 		if (m_transform.position.y > 600) { m_transform.position.y = 0; }
 		if (m_transform.position.y < 0) { m_transform.position.y = 600; }
+
+		if (force.length() > 0)
+		{
+			g_particleSystem.Create(m_transform.position, m_transform.angle + gk::PI, 20, 1, gk::Color{ 1, 1, 1 }, 1, 100, 200);
+		}
 
 		m_transform.Update();
 	}

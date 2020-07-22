@@ -31,6 +31,14 @@ bool gk::Shape::Load(const std::string& filename)
 		stream.close();
 	}
 
+	//Get Radius
+	for (size_t i = 0; i < m_points.size(); i++)
+	{
+		Vector2 p1 = m_points[i];
+		float length = p1.length();
+		if (length > m_radius) m_radius = length;
+	}
+
 	return success;
 }
 

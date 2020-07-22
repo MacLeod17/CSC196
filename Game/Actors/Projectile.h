@@ -20,6 +20,7 @@ namespace gk
 		void SetThrust(float thrust) { m_thrust = thrust; }
 
 	protected:
-		float m_thrust{ 0.0f };
+		float m_thrust{ 0 };
+		float m_lifetime{ 3 };
 	};
 }

@@ -23,9 +23,12 @@ namespace gk
 		void SetColor(Color color) { m_color = color; }
 		const Color& GetColor() const { return m_color; }
 
+		float GetRadius() { return m_radius; }
+
 	private:
 		std::vector<Vector2> m_points;
 		Color m_color;
+		float m_radius{ 1 };
 	};
 
 }

@@ -1,6 +1,7 @@
 
 #include "core.h"
 #include "Graphics/Shape.h"
+#include "Graphics/ParticleSystem.h"
 #include "Math/Math.h"
 #include "Math/Random.h"
 #include "Math/Transform.h"
@@ -48,6 +49,18 @@ bool Update(float dt) // dt = Delta Time
 		scene.AddActor(enemy);
 	}
 
+	if (Core::Input::IsPressed(Core::Input::BUTTON_LEFT))
+	{
+		int x, y;
+		Core::Input::GetMousePos(x, y);
+
+		gk::Color colors[] = { gk::Color::white, gk::Color::red, gk::Color::green, gk::Color::blue, gk::Color::yellow };
+		gk::Color color = colors[(int)gk::random(0, 4)];
+
+		g_particleSystem.Create(gk::Vector2{ x, y }, 0, 180, 30, color, 1, 100, 200);
+	}
+
+	g_particleSystem.Update(dt);
 	scene.Update(dt);
 	
 	return quit;
@@ -58,18 +71,14 @@ void Draw(Core::Graphics& graphics)
 	graphics.DrawString(10, 10, std::to_string(frametime).c_str());
 	graphics.DrawString(10, 20, std::to_string(1.0f / frametime).c_str());
 
-	//float v = (std::sin(t) + 1.0f) * 0.5f;
-	//gk::Color c = gk::Lerp(gk::Color{ 0, 0, 1 }, gk::Color{ 1, 0, 0 }, v);
-	//graphics.SetColor(c);
-	//gk::Vector2 p = gk::Lerp(gk::Vector2{ 400, 300 }, gk::Vector2{ 400, 100 }, v);
-	//graphics.DrawString(p.x, p.y, "Last Starfighter");
-
+	g_particleSystem.Draw(graphics);
 	scene.Draw(graphics);
 }
 
 int main()
 {
 	scene.Startup();
+	g_particleSystem.Startup();
 	
 	gk::Player* player = new gk::Player;
 	player->Load("player.txt");
@@ -94,4 +103,5 @@ int main()
 	Core::Shutdown();
 
 	scene.Shutdown();
+	g_particleSystem.Shutdown();
 }

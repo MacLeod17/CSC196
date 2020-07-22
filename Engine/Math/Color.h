@@ -42,6 +42,12 @@ namespace gk
 		friend std::istream& operator >> (std::istream& stream, Color& c);
 
 		COLORREF pack888() const;
+
+		static const Color white;
+		static const Color red;
+		static const Color green;
+		static const Color blue;
+		static const Color yellow;
 	};
 
 	inline COLORREF Color::pack888() const
