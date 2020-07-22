@@ -55,9 +55,13 @@ bool Update(float dt) // dt = Delta Time
 		Core::Input::GetMousePos(x, y);
 
 		gk::Color colors[] = { gk::Color::white, gk::Color::red, gk::Color::green, gk::Color::blue, gk::Color::yellow };
-		gk::Color color = colors[(int)gk::random(0, 4)];
 
-		g_particleSystem.Create(gk::Vector2{ x, y }, 0, 180, 30, color, 1, 100, 200);
+		for (size_t i = 0; i < 30; i++)
+		{
+			gk::Color color = colors[(int)gk::random(0, 4)];
+			g_particleSystem.Create(gk::Vector2{ x, y }, 0, 180, 2, color, 1, 100, 200);
+		}
+
 	}
 
 	g_particleSystem.Update(dt);

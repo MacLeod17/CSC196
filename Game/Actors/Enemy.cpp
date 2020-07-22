@@ -44,9 +44,13 @@ namespace gk
             m_destroy = true;
 
             Color colors[] = { Color::white, Color::red, Color::green, Color::blue, Color::yellow };
-            Color color = colors[(int)random(0, 4)];
 
-            g_particleSystem.Create(m_transform.position, 0, 180, 30, color, 1, 100, 200);
+            for (size_t i = 0; i < 30; i++)
+            {
+                Color color = colors[(int)random(0, 4)];
+                g_particleSystem.Create(m_transform.position, 0, 180, 2, color, 1, 100, 200);
+            }
+            
         }
     }
 }
