@@ -3,6 +3,8 @@
 #include "Player.h"
 #include "Projectile.h"
 #include "Graphics/ParticleSystem.h"
+#include "../Game.h"
+#include "Object/Scene.h"
 #include "Math/Math.h"
 #include <fstream>
 
@@ -67,5 +69,21 @@ namespace gk
 		}
 
 		m_transform.Update();
+	}
+
+	void Player::OnCollision(Actor* actor)
+	{
+		if (actor->GetType() == eType::ENEMY)
+		{
+			m_scene->GetGame()->SetState(Game::eState::GAME_OVER);
+
+			Color colors[] = { Color::white, Color::red, Color::green, Color::blue, Color::yellow };
+
+			for (size_t i = 0; i < 30; i++)
+			{
+				Color color = colors[(int)random(0, 4)];
+				g_particleSystem.Create(m_transform.position, 0, 180, 2, color, 1, 100, 200);
+			}
+		}
 	}
 }

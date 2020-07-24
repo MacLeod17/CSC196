@@ -3,6 +3,8 @@
 #include "Graphics/ParticleSystem.h"
 #include "Math/Math.h"
 #include "Math/Random.h"
+#include "Object/Scene.h"
+#include "../Game.h"
 #include <fstream>
 
 namespace gk
@@ -42,6 +44,9 @@ namespace gk
         if (actor->GetType() == eType::PROJECTILE)
         {
             m_destroy = true;
+
+            //Set Game Score
+            m_scene->GetGame()->AddScore(100);
 
             Color colors[] = { Color::white, Color::red, Color::green, Color::blue, Color::yellow };
 

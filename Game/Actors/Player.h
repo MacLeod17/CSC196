@@ -15,6 +15,8 @@ namespace gk
 		bool Load(const std::string& filename) override;
 		void Update(float dt) override;
 
+		virtual void OnCollision(Actor* actor);
+
 	protected:
 		Vector2 m_velocity{ 0, 0 };
 		float m_thrust{ 0.0f };
