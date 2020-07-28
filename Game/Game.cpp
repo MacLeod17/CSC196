@@ -1,16 +1,22 @@
 
 #include "Game.h"
+#include "Audio/AudioSystem.h"
 
 void Game::Startup()
 {
+	g_audioSystem.Startup();
 	g_particleSystem.Startup();
 	m_scene.Startup();
 	m_scene.SetGame(this);
+
+	g_audioSystem.AddAudio("Laser", "Laser_Shoot.wav");
+	g_audioSystem.AddAudio("Explosion", "Explosion.wav");
 }
 
 void Game::Shutdown()
 {
 	m_scene.Shutdown();
+	g_audioSystem.Shutdown();
 	g_particleSystem.Shutdown();
 }
 
@@ -41,8 +47,8 @@ bool Game::Update(float dt)
 			gk::Enemy* enemy = new gk::Enemy;
 			enemy->Load("enemy.txt");
 			enemy->SetTarget(player);
-			enemy->GetTransform().position = gk::Vector2{ gk::random(0, 800), gk::random(0, 600) };
-			enemy->SetThrust(gk::random(50, 150));
+			enemy->GetTransform().position = gk::Vector2{ gk::Random(0, 800), gk::Random(0, 600) };
+			enemy->SetThrust(gk::Random(50, 150));
 			m_scene.AddActor(enemy);
 		}
 		m_state = eState::GAME;
@@ -59,8 +65,8 @@ bool Game::Update(float dt)
 			gk::Enemy* enemy = new gk::Enemy;
 			enemy->Load("enemy.txt");
 			enemy->SetTarget(m_scene.GetActor<gk::Player>());
-			enemy->GetTransform().position = gk::Vector2{ gk::random(0, 800), gk::random(0, 600) };
-			enemy->SetThrust(gk::random(50, 150));
+			enemy->GetTransform().position = gk::Vector2{ gk::Random(0, 800), gk::Random(0, 600) };
+			enemy->SetThrust(gk::Random(50, 150));
 			m_scene.AddActor(enemy);
 		}
 
@@ -82,13 +88,14 @@ bool Game::Update(float dt)
 
 		for (size_t i = 0; i < 30; i++)
 		{
-			gk::Color color = colors[(int)gk::random(0, 4)];
+			gk::Color color = colors[(int)gk::Random(0, 4)];
 			g_particleSystem.Create(gk::Vector2{ x, y }, 0, 180, 2, color, 1, 100, 200);
 		}
-
+		g_audioSystem.PlayAudio("Explosion");
 	}
 
 	g_particleSystem.Update(dt);
+	g_audioSystem.Update(dt);
 
 	return quit;
 }

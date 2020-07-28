@@ -1,5 +1,6 @@
 
 #include "core.h"
+#include "Audio/AudioSystem.h"
 #include "Player.h"
 #include "Projectile.h"
 #include "Graphics/ParticleSystem.h"
@@ -42,11 +43,13 @@ namespace gk
 			projectile->GetTransform().position = m_transform.position;
 			projectile->GetTransform().angle = m_transform.angle;
 			m_scene->AddActor(projectile);
+
+			g_audioSystem.PlayAudio("Laser");
 		}
 		
 		Vector2 force{ 0, 0 };
 		if (Core::Input::IsPressed('W')) { force = Vector2::forward * m_thrust; }
-		force = Vector2::rotate(force, m_transform.angle);
+		force = Vector2::Rotate(force, m_transform.angle);
 		//force += gk::Vector2{ 0, 100 };
 
 		m_velocity += force * dt;
@@ -63,7 +66,7 @@ namespace gk
 		if (m_transform.position.y > 600) { m_transform.position.y = 0; }
 		if (m_transform.position.y < 0) { m_transform.position.y = 600; }
 
-		if (force.length() > 0)
+		if (force.Length() > 0)
 		{
 			g_particleSystem.Create(m_transform.position, m_transform.angle + gk::PI, 20, 1, gk::Color{ 1, 1, 1 }, 1, 100, 200);
 		}
@@ -81,9 +84,10 @@ namespace gk
 
 			for (size_t i = 0; i < 30; i++)
 			{
-				Color color = colors[(int)random(0, 4)];
+				Color color = colors[(int)Random(0, 4)];
 				g_particleSystem.Create(m_transform.position, 0, 180, 2, color, 1, 100, 200);
 			}
+			g_audioSystem.PlayAudio("Explosion");
 		}
 	}
 }

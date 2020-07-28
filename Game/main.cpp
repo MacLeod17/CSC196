@@ -19,7 +19,7 @@ void Draw(Core::Graphics& graphics)
 int main()
 {
 	game.Startup();
-	
+
 	char name[] = "Kilpack";
 	Core::Init(name, 800, 600);
 	Core::RegisterUpdateFn(Update);

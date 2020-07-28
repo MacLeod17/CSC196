@@ -35,7 +35,7 @@ bool gk::Shape::Load(const std::string& filename)
 	for (size_t i = 0; i < m_points.size(); i++)
 	{
 		Vector2 p1 = m_points[i];
-		float length = p1.length();
+		float length = p1.Length();
 		if (length > m_radius) m_radius = length;
 	}
 

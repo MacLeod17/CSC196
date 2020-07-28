@@ -16,7 +16,7 @@ namespace gk
 		float& operator [] (size_t index) { return (&r)[index]; }
 		const float& operator [] (size_t index) const { return (&r)[index]; }
 
-		void set(float r, float g, float b) { this->r = r; this->g = g; this->b = b; }
+		void Set(float r, float g, float b) { this->r = r; this->g = g; this->b = b; }
 
 		Color operator + (const Color& c) const { return Color{ r + c.r, g + c.g, b + c.b }; }
 		Color operator - (const Color& c) const { return Color{ r - c.r, g - c.g, b - c.b }; }
@@ -38,10 +38,10 @@ namespace gk
 		Color& operator *= (float s) { r *= s; g *= s; b *= s; return *this; }
 		Color& operator /= (float s) { r /= s; g /= s; b /= s; return *this; }
 
-		operator COLORREF() const { return pack888(); }
+		operator COLORREF() const { return Pack888(); }
 		friend std::istream& operator >> (std::istream& stream, Color& c);
 
-		COLORREF pack888() const;
+		COLORREF Pack888() const;
 
 		static const Color white;
 		static const Color red;
@@ -50,7 +50,7 @@ namespace gk
 		static const Color yellow;
 	};
 
-	inline COLORREF Color::pack888() const
+	inline COLORREF Color::Pack888() const
 	{
 		BYTE _r = static_cast<BYTE>(r * 255.0f);
 		BYTE _g = static_cast<BYTE>(g * 255.0f);

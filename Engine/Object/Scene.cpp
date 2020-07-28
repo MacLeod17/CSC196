@@ -28,7 +28,7 @@ namespace gk
 		{
 			for (size_t j = i + 1; j < actors.size(); j++)
 			{
-				float distance = Vector2::distance(actors[i]->GetTransform().position, actors[j]->GetTransform().position);
+				float distance = Vector2::Distance(actors[i]->GetTransform().position, actors[j]->GetTransform().position);
 				if (distance <= (actors[i]->GetRadius() + actors[j]->GetRadius()))
 				{
 					actors[i]->OnCollision(actors[j]);

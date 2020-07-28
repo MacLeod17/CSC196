@@ -1,5 +1,6 @@
 
 #include "Enemy.h"
+#include "Audio/AudioSystem.h"
 #include "Graphics/ParticleSystem.h"
 #include "Math/Math.h"
 #include "Math/Random.h"
@@ -32,7 +33,7 @@ namespace gk
     void Enemy::Update(float dt)
     {
 	    gk::Vector2 direction = m_target->GetTransform().position - m_transform.position;
-	    direction.normalize();
+	    direction.Normalize();
 	    gk::Vector2 velocity = direction * m_thrust;
         m_transform.position += velocity * dt;
         m_transform.angle = std::atan2(direction.y, direction.x) + gk::DegreesToRadians(90);
@@ -52,10 +53,10 @@ namespace gk
 
             for (size_t i = 0; i < 30; i++)
             {
-                Color color = colors[(int)random(0, 4)];
+                Color color = colors[(int)Random(0, 4)];
                 g_particleSystem.Create(m_transform.position, 0, 180, 2, color, 1, 100, 200);
             }
-            
+            g_audioSystem.PlayAudio("Explosion");
         }
     }
 }

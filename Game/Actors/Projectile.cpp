@@ -32,7 +32,7 @@ namespace gk
         m_lifetime -= dt;
         m_destroy = m_lifetime <= 0;
         
-        Vector2 direction = Vector2::rotate(Vector2::forward, m_transform.angle);
+        Vector2 direction = Vector2::Rotate(Vector2::forward, m_transform.angle);
 	    Vector2 velocity = direction * m_thrust;
         m_transform.position += velocity * dt;
 

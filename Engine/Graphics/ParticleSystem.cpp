@@ -63,10 +63,10 @@ namespace gk
                 p->prevPosition = position;
                 p->color = color;
 
-                float angleRandom = gk::DegreesToRadians(gk::random(-angleRange, angleRange));
-                Vector2 direction = Vector2::rotate(Vector2::forward, angle + angleRandom);
+                float angleRandom = gk::DegreesToRadians(gk::Random(-angleRange, angleRange));
+                Vector2 direction = Vector2::Rotate(Vector2::forward, angle + angleRandom);
 
-                p->velocity = direction * gk::random(speedMin, speedMax);
+                p->velocity = direction * gk::Random(speedMin, speedMax);
             }
         }
     }
