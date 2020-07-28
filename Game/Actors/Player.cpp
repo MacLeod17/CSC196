@@ -72,13 +72,26 @@ namespace gk
 		}
 
 		m_transform.Update();
+
+		if (m_child)
+		{
+			m_child->Update(dt);
+		}
 	}
 
 	void Player::OnCollision(Actor* actor)
 	{
 		if (actor->GetType() == eType::ENEMY)
 		{
-			m_scene->GetGame()->SetState(Game::eState::GAME_OVER);
+			m_scene->GetGame()->SetState(Game::eState::PLAYER_DEAD);
+			m_destroy = true;
+
+			//Set Enemy Targets to NULL
+			auto enemies = m_scene->GetActors<gk::Enemy>();
+			for (auto enemy : enemies)
+			{
+				enemy->SetTarget(nullptr);
+			}
 
 			Color colors[] = { Color::white, Color::red, Color::green, Color::blue, Color::yellow };
 

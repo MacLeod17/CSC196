@@ -1,6 +1,7 @@
 
 #include "Game.h"
 #include "Audio/AudioSystem.h"
+#include "Actors/Locator.h"
 
 void Game::Startup()
 {
@@ -34,12 +35,19 @@ bool Game::Update(float dt)
 		if (Core::Input::IsPressed(VK_SPACE))
 		{
 			m_state = eState::START_GAME;
+			m_score = 0;
+			m_lives = 3;
 		}
 		break;
 	case Game::eState::START_GAME:
 	{
 		gk::Player* player = new gk::Player;
 		player->Load("player.txt");
+
+		gk::Locator* locator = new gk::Locator;
+		locator->GetTransform().position = gk::Vector2{ 0, 4 };
+		player->SetChild(locator);
+
 		m_scene.AddActor(player);
 
 		for (int i = 0; i < 3; i++)
@@ -69,11 +77,37 @@ bool Game::Update(float dt)
 			enemy->SetThrust(gk::Random(50, 150));
 			m_scene.AddActor(enemy);
 		}
-
-		m_scene.Update(dt);
 	}
 		break;
+	case Game::eState::PLAYER_DEAD:
+	{
+		m_lives--;
+		if (m_lives <= 0)
+		{
+			m_state = eState::GAME_OVER;
+		}
+		else
+		{
+			m_state = eState::GAME_WAIT;
+		}
+		m_statetimer = 3.0f;
+	}
+		break;
+	case Game::eState::GAME_WAIT:
+		m_statetimer -= dt;
+		if (m_statetimer <= 0)
+		{
+			m_scene.RemoveAllActors();
+			m_state = eState::START_GAME;
+		}
+		break;
 	case Game::eState::GAME_OVER:
+		m_statetimer -= dt;
+		if (m_statetimer <= 0)
+		{
+			m_scene.RemoveAllActors();
+			m_state = eState::TITLE;
+		}
 		break;
 	default:
 		break;
@@ -94,6 +128,7 @@ bool Game::Update(float dt)
 		g_audioSystem.PlayAudio("Explosion");
 	}
 
+	m_scene.Update(dt);
 	g_particleSystem.Update(dt);
 	g_audioSystem.Update(dt);
 
@@ -105,6 +140,7 @@ void Game::Draw(Core::Graphics& graphics)
 	graphics.DrawString(10, 10, std::to_string(m_frametime).c_str());
 	graphics.DrawString(10, 20, std::to_string(1.0f / m_frametime).c_str());
 
+	m_scene.Draw(graphics);
 	g_particleSystem.Draw(graphics);
 
 	switch (m_state)
@@ -118,9 +154,6 @@ void Game::Draw(Core::Graphics& graphics)
 	case Game::eState::START_GAME:
 		break;
 	case Game::eState::GAME:
-		m_scene.Draw(graphics);
-		graphics.SetColor(gk::Color::white);
-		graphics.DrawString(700, 10, std::to_string(m_score).c_str());
 		break;
 	case Game::eState::GAME_OVER:
 		graphics.SetColor(gk::Color::green);
@@ -129,4 +162,8 @@ void Game::Draw(Core::Graphics& graphics)
 	default:
 		break;
 	}
+
+	graphics.SetColor(gk::Color::white);
+	graphics.DrawString(700, 10, ("Score: " + std::to_string(m_score)).c_str());
+	graphics.DrawString(700, 20, ("Lives: " + std::to_string(m_lives)).c_str());
 }

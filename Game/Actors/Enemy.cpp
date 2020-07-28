@@ -32,11 +32,15 @@ namespace gk
 
     void Enemy::Update(float dt)
     {
-	    gk::Vector2 direction = m_target->GetTransform().position - m_transform.position;
-	    direction.Normalize();
-	    gk::Vector2 velocity = direction * m_thrust;
-        m_transform.position += velocity * dt;
-        m_transform.angle = std::atan2(direction.y, direction.x) + gk::DegreesToRadians(90);
+        gk::Vector2 direction;
+        
+        if (m_target)
+        {
+            direction = m_target->GetTransform().position - m_transform.position;
+            m_transform.angle = std::atan2(direction.y, direction.x) + gk::DegreesToRadians(90);
+            gk::Vector2 velocity = direction.Normalized() * m_thrust;
+            m_transform.position += velocity * dt;
+        }
 
         m_transform.Update();
     }

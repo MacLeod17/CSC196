@@ -16,6 +16,7 @@ namespace gk
 		Transform(const Vector2& position, float scale = 1, float angle = 0) : position{ position }, scale{ scale }, angle{ angle } {}
 
 		void Update();
+		void Update(const Matrix33& mx);
 
 		friend std::istream& operator >> (std::istream& stream, Transform& transform);
 	};

@@ -11,6 +11,7 @@ namespace gk
 
         return stream;
     }
+
     void Transform::Update()
     {
         Matrix33 mxScale;
@@ -23,6 +24,13 @@ namespace gk
         mxTranslate.Translate(position);
 
         matrix = mxScale * mxRotate * mxTranslate;
+    }
+
+    void Transform::Update(const Matrix33& mx)
+    {
+        Update();
+
+        matrix = matrix * mx;
     }
 }
 
