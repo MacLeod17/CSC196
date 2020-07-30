@@ -23,5 +23,6 @@ namespace gk
 		float m_rotationRate{ 0.0f };
 		float m_fireRate{ 0.2f };
 		float m_fireTimer{ 0.0f };
+		float m_angularVelocity{ 0.0f };
 	};
 }

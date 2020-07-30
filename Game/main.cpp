@@ -1,6 +1,7 @@
 
 #include "core.h"
 #include "Game.h"
+#include <time.h>
 
 Game game;
 
@@ -18,6 +19,8 @@ void Draw(Core::Graphics& graphics)
 
 int main()
 {
+	srand(static_cast<unsigned int>(time(NULL)));
+	
 	game.Startup();
 
 	char name[] = "Kilpack";

@@ -38,6 +38,7 @@ namespace gk
 		{
 			if ((*iter)->IsDestroy())
 			{
+				(*iter)->Destroy();
 				delete* iter;
 				iter = m_actors.erase(iter);
 			}

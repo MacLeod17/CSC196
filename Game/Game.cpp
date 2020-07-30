@@ -10,8 +10,11 @@ void Game::Startup()
 	m_scene.Startup();
 	m_scene.SetGame(this);
 
+	LoadHighScore("highscore.txt");
+
 	g_audioSystem.AddAudio("Laser", "Laser_Shoot.wav");
 	g_audioSystem.AddAudio("Explosion", "Explosion.wav");
+	g_audioSystem.AddAudio("One_Up", "One_Up.wav");
 }
 
 void Game::Shutdown()
@@ -19,6 +22,34 @@ void Game::Shutdown()
 	m_scene.Shutdown();
 	g_audioSystem.Shutdown();
 	g_particleSystem.Shutdown();
+
+	SaveHighScore("highscore.txt");
+}
+
+bool Game::LoadHighScore(const std::string& filename)
+{
+	bool success = false;
+
+	std::ifstream stream(filename);
+	if (stream.is_open())
+	{
+		success = true;
+
+		stream >> m_highscore;
+
+		stream.close();
+	}
+
+	return success;
+}
+
+void Game::SaveHighScore(const std::string& filename)
+{
+	std::ofstream stream(filename);
+	if (stream.is_open()) {
+		stream << m_highscore;
+	}
+	stream.close();
 }
 
 bool Game::Update(float dt)
@@ -45,8 +76,12 @@ bool Game::Update(float dt)
 		player->Load("player.txt");
 
 		gk::Locator* locator = new gk::Locator;
-		locator->GetTransform().position = gk::Vector2{ 0, 4 };
-		player->SetChild(locator);
+		locator->GetTransform().position = gk::Vector2{ 3, 2 };
+		player->AddChild(locator);
+
+		locator = new gk::Locator;
+		locator->GetTransform().position = gk::Vector2{ -3, 2 };
+		player->AddChild(locator);
 
 		m_scene.AddActor(player);
 
@@ -55,7 +90,12 @@ bool Game::Update(float dt)
 			gk::Enemy* enemy = new gk::Enemy;
 			enemy->Load("enemy.txt");
 			enemy->SetTarget(player);
-			enemy->GetTransform().position = gk::Vector2{ gk::Random(0, 800), gk::Random(0, 600) };
+
+			float distance = gk::Random(200, 400);
+			float angle = gk::Random(0, gk::TWO_PI);
+			gk::Vector2 position = gk::Vector2{ 400, 300 } + gk::Vector2::Rotate(gk::Vector2{ distance, 0.0f }, angle);
+
+			enemy->GetTransform().position = position;
 			enemy->SetThrust(gk::Random(50, 150));
 			m_scene.AddActor(enemy);
 		}
@@ -77,11 +117,27 @@ bool Game::Update(float dt)
 			enemy->SetThrust(gk::Random(50, 150));
 			m_scene.AddActor(enemy);
 		}
+
+		if (m_scoresincedeath == 1000)
+		{
+			m_lives++;
+			m_scoresincedeath = 0;
+			m_oneuptimer = 3;
+			gk::Color colors[] = { gk::Color::white, gk::Color::red, gk::Color::green, gk::Color::blue, gk::Color::yellow };
+
+			for (size_t i = 0; i < 30; i++)
+			{
+				gk::Color color = colors[(int)gk::Random(0, 4)];
+				g_particleSystem.Create(gk::Vector2{ 700, 40 }, 0, 180, 2, color, 1, 100, 200);
+			}
+			g_audioSystem.PlayAudio("One_Up");
+		}
 	}
 		break;
 	case Game::eState::PLAYER_DEAD:
 	{
 		m_lives--;
+		m_scoresincedeath = 0;
 		if (m_lives <= 0)
 		{
 			m_state = eState::GAME_OVER;
@@ -137,9 +193,6 @@ bool Game::Update(float dt)
 
 void Game::Draw(Core::Graphics& graphics)
 {
-	graphics.DrawString(10, 10, std::to_string(m_frametime).c_str());
-	graphics.DrawString(10, 20, std::to_string(1.0f / m_frametime).c_str());
-
 	m_scene.Draw(graphics);
 	g_particleSystem.Draw(graphics);
 
@@ -149,7 +202,7 @@ void Game::Draw(Core::Graphics& graphics)
 		break;
 	case Game::eState::TITLE:
 		graphics.SetColor(gk::Color::green);
-		graphics.DrawString(400, 300, "Asteroids");
+		graphics.DrawString(375, 300, "Asteroids");
 		break;
 	case Game::eState::START_GAME:
 		break;
@@ -157,7 +210,7 @@ void Game::Draw(Core::Graphics& graphics)
 		break;
 	case Game::eState::GAME_OVER:
 		graphics.SetColor(gk::Color::green);
-		graphics.DrawString(400, 300, "Game Over");
+		graphics.DrawString(375, 300, "Game Over");
 		break;
 	default:
 		break;
@@ -165,5 +218,13 @@ void Game::Draw(Core::Graphics& graphics)
 
 	graphics.SetColor(gk::Color::white);
 	graphics.DrawString(700, 10, ("Score: " + std::to_string(m_score)).c_str());
-	graphics.DrawString(700, 20, ("Lives: " + std::to_string(m_lives)).c_str());
+	graphics.DrawString(665, 20, ("High Score: " + std::to_string(m_highscore)).c_str());
+	graphics.DrawString(700, 30, ("Lives: " + std::to_string(m_lives)).c_str());
+
+	if (m_oneuptimer > 0)
+	{
+		graphics.SetColor(gk::Color::green);
+		graphics.DrawString(700, 40, "1 UP");
+		m_oneuptimer -= m_frametime;
+	}
 }

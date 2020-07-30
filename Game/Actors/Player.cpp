@@ -44,21 +44,28 @@ namespace gk
 			projectile->GetTransform().angle = m_transform.angle;
 			m_scene->AddActor(projectile);
 
+			m_scene->GetGame()->AddScore(-5);
+
 			g_audioSystem.PlayAudio("Laser");
 		}
 		
 		Vector2 force{ 0, 0 };
 		if (Core::Input::IsPressed('W')) { force = Vector2::forward * m_thrust; }
 		force = Vector2::Rotate(force, m_transform.angle);
-		//force += gk::Vector2{ 0, 100 };
 
 		m_velocity += force * dt;
 		m_velocity *= 0.99f;
 		m_transform.position += m_velocity * dt;
 
 		//Rotate
-		if (Core::Input::IsPressed('A')) { m_transform.angle -= (dt * DegreesToRadians(360.0f)); }
-		if (Core::Input::IsPressed('D')) { m_transform.angle += (dt * DegreesToRadians(360.0f)); }
+		float torque{ 0.0f };
+
+		if (Core::Input::IsPressed('A')) { torque = -gk::DegreesToRadians(m_rotationRate); }
+		if (Core::Input::IsPressed('D')) { torque = gk::DegreesToRadians(m_rotationRate); }
+
+		m_angularVelocity += torque * dt;
+		m_angularVelocity *= 0.97f;
+		m_transform.angle += m_angularVelocity * dt;
 
 		if (m_transform.position.x > 800) { m_transform.position.x = 0; }
 		if (m_transform.position.x < 0) { m_transform.position.x = 800; }
@@ -68,14 +75,19 @@ namespace gk
 
 		if (force.Length() > 0)
 		{
-			g_particleSystem.Create(m_transform.position, m_transform.angle + gk::PI, 20, 1, gk::Color{ 1, 1, 1 }, 1, 100, 200);
+			Actor* locator = m_children[0];
+			g_particleSystem.Create(locator->GetTransform().matrix.GetPosition(), m_transform.angle + gk::PI, 20, 1, gk::Color{ 1, 1, 1 }, 1, 100, 200);
+
+			locator = m_children[1];
+			g_particleSystem.Create(locator->GetTransform().matrix.GetPosition(), m_transform.angle + gk::PI, 20, 1, gk::Color{ 1, 1, 1 }, 1, 100, 200);
+
 		}
 
 		m_transform.Update();
 
-		if (m_child)
+		for (auto child : m_children)
 		{
-			m_child->Update(dt);
+			child->Update(dt);
 		}
 	}
 
