@@ -231,7 +231,7 @@ void Game::Draw(Core::Graphics& graphics)
 	if (m_oneuptimer > 0)
 	{
 		graphics.SetColor(gk::Color::green);
-		graphics.DrawString(700, 40, "1 UP");
+		graphics.DrawString(675, 40, "1 UP");
 		m_oneuptimer -= m_frametime;
 	}
 }
