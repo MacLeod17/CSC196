@@ -23,7 +23,7 @@ int main()
 	
 	game.Startup();
 
-	char name[] = "Kilpack";
+	char name[] = "Generic Space Game";
 	Core::Init(name, 800, 600);
 	Core::RegisterUpdateFn(Update);
 	Core::RegisterDrawFn(Draw);

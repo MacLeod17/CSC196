@@ -202,7 +202,14 @@ void Game::Draw(Core::Graphics& graphics)
 		break;
 	case Game::eState::TITLE:
 		graphics.SetColor(gk::Color::green);
-		graphics.DrawString(375, 300, "Asteroids");
+		graphics.DrawString(335, 200, "Space Game");
+		graphics.DrawString(335, 300, "Controls:");
+		graphics.DrawString(345, 315, "W = Move Forward");
+		graphics.DrawString(345, 330, "A = Rotate Left");
+		graphics.DrawString(345, 345, "D = Rotate Right");
+		graphics.DrawString(345, 360, "Spacebar = Shoot Missile");
+		graphics.DrawString(345, 375, "Left Mouse Button = Create Fireworks (purely visual)");
+		graphics.DrawString(345, 390, "ESC = Exit Game");
 		break;
 	case Game::eState::START_GAME:
 		break;
@@ -217,9 +224,9 @@ void Game::Draw(Core::Graphics& graphics)
 	}
 
 	graphics.SetColor(gk::Color::white);
-	graphics.DrawString(700, 10, ("Score: " + std::to_string(m_score)).c_str());
-	graphics.DrawString(665, 20, ("High Score: " + std::to_string(m_highscore)).c_str());
-	graphics.DrawString(700, 30, ("Lives: " + std::to_string(m_lives)).c_str());
+	graphics.DrawString(675, 10, ("Score: " + std::to_string(m_score)).c_str());
+	graphics.DrawString(640, 20, ("High Score: " + std::to_string(m_highscore)).c_str());
+	graphics.DrawString(675, 30, ("Lives: " + std::to_string(m_lives)).c_str());
 
 	if (m_oneuptimer > 0)
 	{
